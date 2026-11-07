@@ -28,3 +28,6 @@ data/cars/
 data/processed/
 
 catboost_info/
+
+# Ignore locally trained models
+models/
