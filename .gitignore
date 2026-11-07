@@ -26,3 +26,5 @@ Thumbs.db
 # Datasets
 data/cars/
 data/processed/
+
+catboost_info/
