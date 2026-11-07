@@ -1,3 +1,4 @@
+
 from pathlib import Path
 import json
 
@@ -21,19 +22,22 @@ def main():
         "power_hp": ask_integer("Power (hp): ", minimum=1)
     }
 
-    # Select make and model
+    # Select make
     car["make"] = ask_option("Make", valid_categories["make"])
 
-    car["model"] = ask_option(
-        "Model",
-        valid_categories["models_by_make"][car["make"]]
+    # Show fuels available for the selected make
+    available_fuels = sorted(
+        valid_categories["models_by_make_and_fuel"][car["make"]].keys()
     )
 
-    # Select the remaining categories
-    car["fuel_category"] = ask_option(
-        "Fuel category", valid_categories["fuel_category"]
-    )
+    car["fuel_category"] = ask_option("Fuel category", available_fuels)
 
+    # Show models available for the selected make and fuel
+    available_models = valid_categories["models_by_make_and_fuel"][car["make"]][car["fuel_category"]]
+
+    car["model"] = ask_option("Model", available_models)
+
+    # Select remaining categories
     car["transmission"] = ask_option(
         "Transmission", valid_categories["transmission"]
     )
@@ -46,7 +50,7 @@ def main():
         "Country", valid_categories["country_code"]
     )
 
-    # Load model and predict
+    # Load model and predict price
     model = load_model()
     predicted_price = predict_price(model, car)
 
