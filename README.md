@@ -1,66 +1,130 @@
 # AutoValue — Car Price Prediction
 
-AutoValue is a machine learning project that estimates used-car listing prices based on vehicle characteristics.
+AutoValue is an end-to-end Machine Learning project that predicts used car listing prices based on vehicle characteristics.
 
-The project covers the complete machine learning workflow, from exploratory data analysis and preprocessing to model training, evaluation, and deployment through an interactive Streamlit application.
+The project covers data exploration, preprocessing, model training, evaluation, and deployment through an interactive web application built with Streamlit.
 
-## Features
+### [Try AutoValue Live](https://autovalue-car-price-prediction-eu.streamlit.app/)
 
-- Interactive car price estimation.
-- Dependent vehicle selection based on available combinations in the dataset.
-- Support for eight European markets: Austria, Belgium, Germany, Spain, France, Italy, Luxembourg, and the Netherlands.
-- A trained CatBoost regression model.
-- Automated tests for predictions and input validation.
+## Project Overview
+
+The goal of AutoValue is to estimate the price of a used car using information such as its brand, model, mileage, age, engine power, and fuel type.
+
+The application supports **8 European countries** and generates predictions using a trained CatBoost regression model.
 
 ## Dataset
 
-The project uses European used-car listing data.
+The original dataset contained approximately **118,000 used car listings** from European markets.
 
-After preprocessing, the dataset contains **108,273 vehicles**. Each vehicle is represented by nine input features:
+After data cleaning and preprocessing, **108,273 records** were retained.
 
-| Feature | Description |
-|---|---|
-| Make | Car manufacturer |
-| Model | Vehicle model |
-| Mileage | Distance travelled in kilometres |
-| Vehicle age | Age in years |
-| Power | Engine power in horsepower |
-| Fuel category | Type of fuel |
-| Transmission | Transmission type |
-| Body type | Vehicle body style |
-| Country | European market |
+The model uses the following features:
 
-The prediction target is the **advertised listing price**, not the final transaction price.
+- Brand and model
+- Mileage
+- Vehicle age
+- Engine power (hp)
+- Fuel type
+- Transmission
+- Body type
+- Country
 
-## Model Development
+The target variable is the advertised vehicle price in euros.
 
-Several regression models were trained and compared, starting with simple baselines and progressing to more complex algorithms.
+## Machine Learning Models
 
-| Model | Test MAE |
-|---|---:|
-| Dummy Regressor | €34,978.86 |
-| Linear Regression | €20,882.85 |
-| Random Forest | €6,359.84 |
-| **CatBoost** | **€5,686.50** |
+Several regression models were evaluated during development:
 
-CatBoost was selected as the final model based on its performance.
+- Dummy Regressor
+- Linear Regression
+- Random Forest Regressor
+- CatBoost Regressor
+
+**CatBoost** was selected as the final model based on its performance on the test dataset.
 
 ### Final Model Performance
 
-| Metric | Test Result |
+| Metric | Result |
 |---|---:|
 | MAE | €5,686.50 |
 | RMSE | €30,342.40 |
 | R² | 0.9218 |
 
-The relatively high RMSE reflects the influence of rare, exceptionally expensive vehicles that produce larger prediction errors.
+The model was trained on **86,618 records** and evaluated on **21,655 test records**.
 
-## Running the Application
+## Application
 
-Install the required dependencies:
+AutoValue provides an interactive interface where users can:
+
+- Select a vehicle's brand and model.
+- Enter mileage, age, and engine power.
+- Choose fuel type, transmission, and body type.
+- Select one of eight European markets.
+- Obtain an estimated price in euros.
+
+### Application Preview
+
+![AutoValue Application](assets/autovalue-preview.png)
+
+**[Open the Live Application](https://autovalue-car-price-prediction-eu.streamlit.app/)**
+
+## Project Structure
+
+```text
+car-price-prediction/
+├── config/
+│   └── valid_categories.json
+├── data/
+│   └── processed/
+│       └── cars_clean.csv
+├── models/
+│   └── catboost_final.joblib
+├── notebooks/
+│   ├── 01_exploratory_analysis.ipynb
+│   ├── 02_data_preprocessing.ipynb
+│   └── 03_model_training.ipynb
+├── src/
+│   ├── __init__.py
+│   ├── app.py
+│   ├── main.py
+│   ├── predict.py
+│   └── validation.py
+├── tests/
+├── requirements.txt
+└── README.md
+```
+
+## Technologies Used
+
+- **Python** — Programming language
+- **Pandas and NumPy** — Data processing
+- **Matplotlib** — Data visualization
+- **Scikit-learn** — Machine Learning and evaluation
+- **CatBoost** — Final prediction model
+- **Streamlit** — Web application
+- **Jupyter Notebook** — Data analysis and experimentation
+- **Git and GitHub** — Version control
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/FranciscoVieira10/car-price-prediction.git
+cd car-price-prediction
+```
+
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
+```
+
+Download the trained model using Git LFS (requires Git LFS to be installed):
+
+```bash
+git lfs install
+git lfs pull
 ```
 
 Run the Streamlit application:
@@ -69,26 +133,31 @@ Run the Streamlit application:
 python -m streamlit run src/app.py
 ```
 
-The final CatBoost model is stored in `models/catboost_final.joblib` using Git LFS. Make sure the model file has been downloaded correctly.
+Alternatively, run the command-line version:
 
-## Running the Tests
+```bash
+python -m src.main
+```
+
+## Testing
+
+Run the automated tests with:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-The project currently contains 11 automated tests covering input validation, dataset categories, and prediction behaviour.
-
-## Technologies
-
-Python, Pandas, NumPy, Scikit-learn, CatBoost, Matplotlib, Streamlit, Joblib and Jupyter Notebook.
+The project includes **11 automated tests** covering input validation, vehicle categories, and prediction behaviour.
 
 ## Limitations
 
-Predictions are estimates based on historical advertised prices. Accuracy may be lower for rare or expensive vehicles, unusual feature combinations, or markets and conditions that are not well represented in the training data.
+- Predictions represent estimated advertised prices, not guaranteed selling prices.
+- Accuracy may vary for rare, luxury, or unusually expensive vehicles.
+- Estimates depend on the quality and representativeness of the training data.
+- Market prices may change over time.
 
-The model should not be interpreted as providing guaranteed market valuations.
+## Deployment
 
-## Project Status
+AutoValue is deployed using Streamlit Community Cloud.
 
-Model development and local application implementation are complete. Public deployment is the next step.
+**Live Demo:** https://autovalue-car-price-prediction-eu.streamlit.app/
