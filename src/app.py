@@ -4,8 +4,7 @@ import json
 
 import streamlit as st
 
-from src.predict import load_model, predict_price
-
+from predict import load_model, predict_price
 
 st.set_page_config(page_title="AutoValue", page_icon="🚗", layout="wide")
 
