@@ -24,6 +24,7 @@ class TestValidCategories(unittest.TestCase):
                 for model in models:
                     self.assertTrue(self.categories["body_types_by_make_fuel_model"][make][fuel][model])
                     self.assertTrue(self.categories["transmissions_by_make_fuel_model"][make][fuel][model])
+                    self.assertIn(model, self.categories["power_median_by_make_fuel_model"][make][fuel])
 
     def test_body_type_combinations_exist_in_dataset(self):
         real = set(zip(self.df["make"], self.df["fuel_category"], self.df["model"], self.df["body_type"]))

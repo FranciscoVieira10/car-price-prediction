@@ -38,13 +38,15 @@ def main():
     car["model"] = ask_option("Model", available_models)
 
     # Select remaining categories
-    car["transmission"] = ask_option(
-        "Transmission", valid_categories["transmission"]
-    )
+    # Show transmissions available for the selected make, fuel and model
+    available_transmissions = valid_categories["transmissions_by_make_fuel_model"][car["make"]][car["fuel_category"]][car["model"]]
 
-    car["body_type"] = ask_option(
-        "Body type", valid_categories["body_type"]
-    )
+    car["transmission"] = ask_option("Transmission", available_transmissions)
+
+    # Show body types available for the selected make, fuel and model
+    available_body_types = valid_categories["body_types_by_make_fuel_model"][car["make"]][car["fuel_category"]][car["model"]]
+
+    car["body_type"] = ask_option("Body type", available_body_types)
 
     car["country_code"] = ask_option(
         "Country", valid_categories["country_code"]
